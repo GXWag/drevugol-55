@@ -18,7 +18,8 @@
       </div>
     </div>
 
-    <nav class="nav">
+    <nav class="nav" id="nav">
+      <div class="nav-pill" id="navPill"></div>
       <div class="nav-item active">
         <svg viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z"/></svg>
         Дашборд
@@ -243,5 +244,24 @@
 
   </main>
 </div>
+<script>
+(function(){
+  var nav = document.getElementById('nav'), pill = document.getElementById('navPill');
+  if (!nav || !pill) return;
+  var items = [].slice.call(nav.querySelectorAll('.nav-item'));
+  function place(el){
+    items.forEach(function(i){ i.classList.toggle('active', i === el); });
+    pill.style.height = el.offsetHeight + 'px';
+    pill.style.transform = 'translateY(' + el.offsetTop + 'px)';
+  }
+  items.forEach(function(el){ el.addEventListener('click', function(){ place(el); }); });
+  var active = nav.querySelector('.nav-item.active') || items[0];
+  pill.style.transition = 'none';
+  place(active);
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){ pill.style.transition = ''; });
+  });
+})();
+</script>
 </body>
 </html>
